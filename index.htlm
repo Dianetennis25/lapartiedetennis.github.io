@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <title>La Partie de Tennis – QUESTIONS-RÉPONSES</title>
+  <style>
+    body { font-family: sans-serif; margin: 2em; background: #f6f6f6; }
+    h1 { font-size: 1.5em; }
+    input { padding: 0.5em; margin: 0.5em 0; width: 100%; max-width: 400px; }
+    .fiche { background: white; border: 1px solid #ccc; padding: 1em; margin-top: 1em; border-radius: 6px; }
+    .numero { font-weight: bold; }
+    .question, .reponse { margin: 0.5em 0; }
+  </style>
+</head>
+<body>
+  <h1>🔍 Recherche dans les fiches – QUESTIONS-RÉPONSES</h1>
+
+  <input type="file" id="fileInput" accept="application/json">
+  <input type="text" id="searchInput" placeholder="Entrez un numéro de carte...">
+
+  <div id="resultats"></div>
+
+  <script>
+    let fiches = [];
+
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(event) {
+        try {
+          fiches = JSON.parse(event.target.result);
+          afficherFiches([]);
+        } catch (err) {
+          alert("Erreur de lecture du fichier JSON");
+        }
+      };
+      reader.readAsText(file);
+    });
+
+    document.getElementById('searchInput').addEventListener('input', function() {
+      const val = this.value.trim();
+      const fichesFiltrees = fiches.filter(f => f.numero.toString() === val);
+      afficherFiches(fichesFiltrees);
+    });
+
+    function afficherFiches(data) {
+      const conteneur = document.getElementById('resultats');
+      conteneur.innerHTML = '';
+      data.forEach(fiche => {
+        const div = document.createElement('div');
+        div.className = 'fiche';
+        div.innerHTML = `
+          <div class="numero">Carte no ${fiche.numero}</div>
+          <div class="question"><strong>Q :</strong> ${formaterTexte(fiche.question)}</div>
+          <div class="reponse"><strong>R :</strong> ${formaterTexte(fiche.reponse)}</div>
+        `;
+        conteneur.appendChild(div);
+      });
+    }
+
+    function formaterTexte(texte) {
+      return texte
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/<sup>(.*?)<\/sup>/g, '<sup>$1</sup>');
+    }
+  </script>
+</body>
+</html>
