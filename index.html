@@ -7,26 +7,9 @@
 </head>
 <body>
   <h1>🎾 La Partie de Tennis</h1>
-  <div class="button-container">
-    <button onclick="showSection('qr')">Questions-Réponses</button>
-    <button onclick="showSection('bris')">Bris</button>
-  </div>
-
-  <div id="qr-section" class="section" style="display:none;">
-    <h2>Questions-Réponses</h2>
-    <input type="text" id="qr-category" placeholder="Catégorie (i, oi, ou, an, ent, ien, as)">
-    <input type="number" id="qr-number" placeholder="Numéro de fiche">
-    <button onclick="fetchQR()">Afficher</button>
-    <div id="qr-result" class="result"></div>
-  </div>
-
-  <div id="bris-section" class="section" style="display:none;">
-    <h2>Bris</h2>
-    <input type="number" id="bris-number" placeholder="Numéro de fiche">
-    <button onclick="fetchBris()">Afficher</button>
-    <div id="bris-result" class="result"></div>
-  </div>
-
+  <p>Commande (ex. : oi 24, br 3, QUI 72)</p>
+  <input type="text" id="command" placeholder="Tapez une commande abrégée et numéro">
+  <div id="result" class="result"></div>
   <script src="script.js"></script>
 </body>
 </html>

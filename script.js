@@ -10,14 +10,9 @@ const abbrMap = {
   'br': 'Bris'
 };
 
-function showSection(id) {
-  document.getElementById('qr-section').style.display = id === 'qr' ? 'block' : 'none';
-  document.getElementById('bris-section').style.display = id === 'bris' ? 'block' : 'none';
-}
-
 function normalizeCategory(input) {
   const lower = input.toLowerCase();
-  return abbrMap[lower] || (Object.values(abbrMap).includes(input) ? input : null);
+  return abbrMap[lower] || (Object.values(abbrMap).map(x => x.toLowerCase()).includes(lower) ? input : null);
 }
 
 function formatQuestion(entry) {
@@ -27,52 +22,38 @@ function formatQuestion(entry) {
   return `<p><strong>${entry.numero}.</strong> ${text}</p>`;
 }
 
-async function fetchQR() {
-  const categoryInput = document.getElementById('qr-category').value.trim();
-  const numberInput = document.getElementById('qr-number').value.trim();
-  const category = normalizeCategory(categoryInput);
-  const resultBox = document.getElementById('qr-result');
-  resultBox.innerHTML = '';
+async function fetchEntry(command) {
+  const parts = command.trim().split(/\s+/);
+  if (parts.length !== 2) {
+    document.getElementById('result').innerHTML = '<p>Commande invalide.</p>';
+    return;
+  }
 
-  if (!category || !numberInput) {
-    resultBox.innerHTML = '<p>Catégorie ou numéro invalide.</p>';
+  const [rawCategory, rawNumber] = parts;
+  const category = normalizeCategory(rawCategory);
+  const number = parseInt(rawNumber);
+
+  if (!category || isNaN(number)) {
+    document.getElementById('result').innerHTML = '<p>Commande invalide.</p>';
     return;
   }
 
   try {
     const response = await fetch(`data/${category}.json`);
     const data = await response.json();
-    const entry = data.find(item => item.numero === parseInt(numberInput));
+    const entry = data.find(item => item.numero === number);
     if (entry) {
-      resultBox.innerHTML = formatQuestion(entry);
+      document.getElementById('result').innerHTML = formatQuestion(entry);
     } else {
-      resultBox.innerHTML = '<p>Fiche non trouvée.</p>';
+      document.getElementById('result').innerHTML = '<p>Fiche non trouvée.</p>';
     }
   } catch {
-    resultBox.innerHTML = '<p>Erreur lors du chargement.</p>';
+    document.getElementById('result').innerHTML = '<p>Erreur de chargement.</p>';
   }
 }
 
-async function fetchBris() {
-  const numberInput = document.getElementById('bris-number').value.trim();
-  const resultBox = document.getElementById('bris-result');
-  resultBox.innerHTML = '';
-
-  if (!numberInput) {
-    resultBox.innerHTML = '<p>Numéro invalide.</p>';
-    return;
+document.getElementById('command').addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') {
+    fetchEntry(this.value);
   }
-
-  try {
-    const response = await fetch(`data/Bris.json`);
-    const data = await response.json();
-    const entry = data.find(item => item.numero === parseInt(numberInput));
-    if (entry) {
-      resultBox.innerHTML = formatQuestion(entry);
-    } else {
-      resultBox.innerHTML = '<p>Fiche non trouvée.</p>';
-    }
-  } catch {
-    resultBox.innerHTML = '<p>Erreur lors du chargement.</p>';
-  }
-}
+});

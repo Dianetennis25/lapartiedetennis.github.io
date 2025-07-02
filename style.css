@@ -3,25 +3,10 @@ body {
   font-family: Arial, sans-serif;
   padding: 2em;
 }
-h1 {
-  text-align: center;
-}
-.button-container {
-  text-align: center;
-  margin-bottom: 2em;
-}
-button {
-  margin: 0.5em;
-  padding: 0.5em 1.5em;
-  font-size: 1em;
-}
-.section {
-  margin-top: 2em;
-}
 input {
-  margin: 0.3em;
   padding: 0.5em;
   font-size: 1em;
+  width: 100%;
 }
 .result {
   margin-top: 1em;
