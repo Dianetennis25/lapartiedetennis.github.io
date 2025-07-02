@@ -12,14 +12,14 @@ const abbrMap = {
 
 function normalizeCategory(input) {
   const lower = input.toLowerCase();
-  return abbrMap[lower] || (Object.values(abbrMap).map(x => x.toLowerCase()).includes(lower) ? input : null);
+  return abbrMap[lower] || (Object.values(abbrMap).find(x => x.toLowerCase() === lower) || null);
 }
 
 function formatQuestion(entry) {
   let text = entry.question
     .replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>')
     .replace(/\*(.*?)\*/g, '<span class="italic">$1</span>');
-  return `<p><strong>${entry.numero}.</strong> ${text}</p>`;
+  return `<p>${entry.numero}. ${text}</p>`;
 }
 
 async function fetchEntry(command) {
