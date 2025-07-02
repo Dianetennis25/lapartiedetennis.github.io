@@ -10,6 +10,11 @@ const abbrMap = {
   'br': 'Bris'
 };
 
+function showSection(id) {
+  document.getElementById('qr-section').style.display = id === 'qr' ? 'block' : 'none';
+  document.getElementById('bris-section').style.display = id === 'bris' ? 'block' : 'none';
+}
+
 function normalizeCategory(input) {
   const lower = input.toLowerCase();
   return abbrMap[lower] || (Object.values(abbrMap).find(x => x.toLowerCase() === lower) || null);
@@ -18,14 +23,16 @@ function normalizeCategory(input) {
 function formatQuestion(entry) {
   let text = entry.question
     .replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>')
+    .replace(/\*(.*?)\*\*/g, '*$1**')  // pour éviter les doubles astérisques mal fermés
     .replace(/\*(.*?)\*/g, '<span class="italic">$1</span>');
   return `<p>${entry.numero}. ${text}</p>`;
 }
 
-async function fetchEntry(command) {
+async function fetchEntry(command, type) {
+  const resultBox = document.getElementById(type === 'qr' ? 'qr-result' : 'bris-result');
   const parts = command.trim().split(/\s+/);
   if (parts.length !== 2) {
-    document.getElementById('result').innerHTML = '<p>Commande invalide.</p>';
+    resultBox.innerHTML = '<p>Commande invalide.</p>';
     return;
   }
 
@@ -34,7 +41,7 @@ async function fetchEntry(command) {
   const number = parseInt(rawNumber);
 
   if (!category || isNaN(number)) {
-    document.getElementById('result').innerHTML = '<p>Commande invalide.</p>';
+    resultBox.innerHTML = '<p>Commande invalide.</p>';
     return;
   }
 
@@ -43,17 +50,18 @@ async function fetchEntry(command) {
     const data = await response.json();
     const entry = data.find(item => item.numero === number);
     if (entry) {
-      document.getElementById('result').innerHTML = formatQuestion(entry);
+      resultBox.innerHTML = formatQuestion(entry);
     } else {
-      document.getElementById('result').innerHTML = '<p>Fiche non trouvée.</p>';
+      resultBox.innerHTML = '<p>Fiche non trouvée.</p>';
     }
   } catch {
-    document.getElementById('result').innerHTML = '<p>Erreur de chargement.</p>';
+    resultBox.innerHTML = '<p>Erreur de chargement.</p>';
   }
 }
 
-document.getElementById('command').addEventListener('keydown', function(event) {
-  if (event.key === 'Enter') {
-    fetchEntry(this.value);
-  }
+document.getElementById('qr-command').addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') fetchEntry(this.value, 'qr');
+});
+document.getElementById('bris-command').addEventListener('keydown', function(event) {
+  if (event.key === 'Enter') fetchEntry(this.value, 'bris');
 });

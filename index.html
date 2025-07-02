@@ -7,9 +7,23 @@
 </head>
 <body>
   <h1>🎾 La Partie de Tennis</h1>
-  <p>Commande (ex. : Qui 1, i 1, br 3, AS 2)</p>
-  <input type="text" id="command" placeholder="Tapez une commande abrégée ou complète suivie du numéro">
-  <div id="result" class="result"></div>
+  <div class="button-container">
+    <button onclick="showSection('qr')">Questions-Réponses</button>
+    <button onclick="showSection('bris')">Bris</button>
+  </div>
+
+  <div id="qr-section" class="section" style="display:none;">
+    <p>Commande (ex. : Qui 1, i 1, AS 2)</p>
+    <input type="text" id="qr-command" placeholder="Catégorie + numéro">
+    <div id="qr-result" class="result"></div>
+  </div>
+
+  <div id="bris-section" class="section" style="display:none;">
+    <p>Commande (ex. : br 3)</p>
+    <input type="text" id="bris-command" placeholder="br + numéro">
+    <div id="bris-result" class="result"></div>
+  </div>
+
   <script src="script.js"></script>
 </body>
 </html>
