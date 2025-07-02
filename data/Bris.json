@@ -1,14 +1,6 @@
 [
   {
-    "numero": 1,
-    "question": "*Bris* 1 – **Quelle** est la règle du let ? – *Rejouer le service*."
-  },
-  {
-    "numero": 2,
-    "question": "*Bris* 2 – **Que** fait-on à 6-6 ? – *On joue un tie-break*."
-  },
-  {
     "numero": 3,
-    "question": "*Bris* 3 – **Combien** de points pour gagner un jeu ? – *Quatre (15, 30, 40, jeu)*."
+    "question": "*Bris* : **Combien** de points faut-il pour gagner un jeu ? – *Quatre (15, 30, 40, jeu)*."
   }
 ]
