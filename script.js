@@ -23,7 +23,7 @@ function normalizeCategory(input) {
 function formatQuestion(entry) {
   let text = entry.question
     .replace(/\*\*(.*?)\*\*/g, '<span class="bold">$1</span>')
-    .replace(/\*(.*?)\*\*/g, '*$1**')  // pour éviter les doubles astérisques mal fermés
+    .replace(/\*(.*?)\*\*/g, '*$1**')  // sécurité
     .replace(/\*(.*?)\*/g, '<span class="italic">$1</span>');
   return `<p>${entry.numero}. ${text}</p>`;
 }
